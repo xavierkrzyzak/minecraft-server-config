@@ -1,0 +1,3 @@
+[submodule "plugins/TerrainControl/worlds/world"]
+	path = plugins/TerrainControl/worlds/world
+	url = git@github.com:raws/terrain-control-config.git
