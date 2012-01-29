@@ -1,0 +1,16 @@
+# Set this to "low" to reduce number of boot messages or to high, highest, extreme for more debugging info
+verbosity: normal
+
+# Try adjusting this if you have compatibility problems with other plugins.
+# Default: "high". Can also use "low", "normal", "high", "highest".
+priority: high
+
+# OtherDrops uses BukkitPermissions by default - set 'useyetipermissions' to true if you want 
+# legacy permissions support (no guarantees it will work).
+useyetipermissions: false
+
+# Number of decimal places to round money drops off to (for the drop and message)
+money-precision: 2
+
+# Set this to false if you don't want blocks to drop their custom configs upon explosions (eg. tnt/creepers)
+customdropsforexplosions: true

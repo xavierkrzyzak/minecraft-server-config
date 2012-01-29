@@ -1,0 +1,24 @@
+include-files:
+  - includes/od-dyewool.yml
+  - includes/od-fix_undroppables.yml
+  - includes/od-goldtools-basic.yml
+  - includes/od-leaf_overhaul.yml
+  - includes/od-playerdeath_zombie.yml
+  - includes/od-undead_chaos.yml
+
+aliases: {}
+
+defaults: {}
+
+otherdrops:
+  GRASS:
+    - tool: ALL
+      drop: SEEDS
+      quantity: 1-3
+      chance: 1
+      time: DAY
+    - tool: ALL
+      drop: BROWN_MUSHROOM
+      quantity: 1
+      chance: 1
+      time: NIGHT

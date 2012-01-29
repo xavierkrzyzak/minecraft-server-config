@@ -1,0 +1,12 @@
+# Stop Mob Farming (config by Zarius)
+
+aliases:
+        - tool: &environ [DAMAGE_ENTITY_EXPLOSION, DAMAGE_FIRE,  DAMAGE_CONTACT, DAMAGE_DROWNING, DAMAGE_FALL, DAMAGE_SUFFOCATION]
+        
+        - &environNoDrop
+          tool: *environ
+          drop: NOTHING
+          flags: UNIQUE    # this means that if this drop occurs - none of the others for this creature will.
+
+otherdrops:
+    ANY_CREATURE: [*environNoDrop]
