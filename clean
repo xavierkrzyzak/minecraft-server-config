@@ -1,0 +1,2 @@
+#!/bin/sh
+rm -r world world_nether world_the_end
