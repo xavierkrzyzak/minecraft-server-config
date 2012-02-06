@@ -38,7 +38,8 @@ end
 
 class BukkitProcess < EventMachine::Connection
   def post_init
-    info "BukkitProcess spawned"
+    info "Generating map #{$count + 1} of #{$args[:count]}"
+    start_timeout "Bukkit failed to start"
   end
   
   def receive_data(data)
@@ -74,32 +75,50 @@ class BukkitProcess < EventMachine::Connection
   alias_method :send_data, :send_data_with_log
   
   def unbind
+    stop_timeout
     info "BukkitProcess exited"
-    EventMachine.stop
+    $world.rmtree
+    next!
   end
   
   def stop!
     send_data "stop"
+    start_timeout "Bukkit failed to stop", 30 do
+      $world.rmtree
+      close_connection
+    end
+  end
+  
+  def next!
+    $count += 1
+    if $count < $args[:count]
+      $bukkit = EventMachine.popen3($command, BukkitProcess)
+    else
+      EventMachine.stop
+    end
   end
   
   protected
     def on_world_seed(seed)
+      stop_timeout
       @seed = seed
+      start_timeout "Spawn failed to generate", 30
     end
     
     def on_spawn_generated
+      stop_timeout
       send_data "tc map world"
-      @map_timeout = EventMachine::Timer.new(10) do
-        stop!
-      end
+      start_timeout "Map failed to start generating"
     end
     
     def on_generating_map
+      stop_timeout
       info "Generating biome map for seed #{@seed.inspect}"
-      @map_timeout.cancel
+      start_timeout "Map failed to generate", 60
     end
     
     def on_map_done
+      stop_timeout
       map = $root.join("world_biome.png")
       if map.exist?
         dest = $args[:maps].join("#{@seed}.png")
@@ -110,6 +129,21 @@ class BukkitProcess < EventMachine::Connection
       end
     ensure
       stop!
+    end
+    
+    def start_timeout(message, timeout = 10, &block)
+      @timeout = EventMachine::Timer.new(timeout) do
+        error "Timeout: #{message} (#{timeout} sec)"
+        if block
+          block.call
+        else
+          stop!
+        end
+      end
+    end
+    
+    def stop_timeout
+      @timeout.cancel if @timeout
     end
     
     def log(level, *args)
@@ -140,15 +174,11 @@ end
 $root = Pathname.new(File.expand_path(File.join(File.dirname(__FILE__), "..")))
 $world = $root.join("world")
 jar = $root.join("craftbukkit-1.0.1-r1597-modded.jar")
-command = ["java", "-Xms2G", "-Xmx4G", "-Xincgc", "-jar", jar.to_s].join(" ")
+$command = ["java", "-Xms2G", "-Xmx4G", "-Xincgc", "-jar", jar.to_s].join(" ")
 
-$args[:count].times do |i|
-  $logger.info "Generating map #{i+1} of #{$args[:count]}..."
-  EventMachine.run do
-    trap("INT") { @bukkit.stop! if @bukkit }
-    @bukkit = EventMachine.popen3(command, BukkitProcess)
-  end
-  $world.rmtree
+$count = 0
+EventMachine.run do
+  $bukkit = EventMachine.popen3($command, BukkitProcess)
 end
 
 load $root.join("script", "git-reset-soft").to_s
