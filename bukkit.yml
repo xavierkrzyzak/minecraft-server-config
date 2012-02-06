@@ -14,7 +14,7 @@
 
 
 settings:
-  allow-end: true
+  allow-end: false
   spawn-radius: 16
   permissions-file: permissions.yml
   update-folder: update
