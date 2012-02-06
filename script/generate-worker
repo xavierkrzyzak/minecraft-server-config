@@ -150,3 +150,5 @@ $args[:count].times do |i|
   end
   $world.rmtree
 end
+
+load $root.join("script", "git-reset-soft").to_s
