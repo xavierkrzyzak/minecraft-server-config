@@ -1,0 +1,152 @@
+#!/usr/bin/env ruby
+# Generate Terrain Control biome maps named for their seeds
+# Usage: generate-worker <path to maps> [count]
+require "eventmachine"
+require "fileutils"
+require "logger"
+require "pathname"
+
+if ARGV.empty?
+  $stderr.puts "usage: generate-worker <path to maps> [count]"
+  exit 1
+else
+  $args = { :maps => Pathname.new(File.expand_path(ARGV[0])), :count => (ARGV[1] || 1).to_i }
+end
+
+module EventMachine
+  class StderrHandler < EventMachine::Connection
+    def initialize(connection)
+      @connection = connection
+    end
+    
+    def receive_data(data)
+      @connection.receive_stderr(data)
+    end
+  end
+  
+  def self.popen3(*args)
+    original_stderr = $stderr.dup
+    read, write = IO.pipe
+    $stderr.reopen(write)
+    connection = EM.popen(*args)
+    $stderr.reopen(original_stderr)
+    EM.attach(read, StderrHandler, connection)
+    yield connection if block_given?
+    connection
+  end
+end
+
+class BukkitProcess < EventMachine::Connection
+  def post_init
+    info "BukkitProcess spawned"
+  end
+  
+  def receive_data(data)
+    data.split(/[\r\n]+/).each do |line|
+      receive_line(line)
+    end
+  end
+  alias_method :receive_stderr, :receive_data
+  
+  def receive_line(line)
+    line.strip!
+    line.sub!(/^>\s*/, "")
+    return if line.empty?
+    # debug "received", line.inspect
+    
+    if line =~ /world seed is (\S+)/i
+      on_world_seed($~[1])
+    elsif line =~ /Done \([0-9\.]+s\)! For help/i
+      on_spawn_generated
+    elsif line =~ /\e\[32mGenerating map/i
+      on_generating_map
+    elsif line =~ /\e\[32mDone/i
+      on_map_done
+    end
+  end
+  
+  def send_data_with_log(data)
+    data << "\n" unless data.end_with?("\n")
+    # debug "sent", data.inspect
+    send_data_without_log(data)
+  end
+  alias_method :send_data_without_log, :send_data
+  alias_method :send_data, :send_data_with_log
+  
+  def unbind
+    info "BukkitProcess exited"
+    EventMachine.stop
+  end
+  
+  def stop!
+    send_data "stop"
+  end
+  
+  protected
+    def on_world_seed(seed)
+      @seed = seed
+    end
+    
+    def on_spawn_generated
+      send_data "tc map world"
+      @map_timeout = EventMachine::Timer.new(10) do
+        stop!
+      end
+    end
+    
+    def on_generating_map
+      info "Generating biome map for seed #{@seed.inspect}"
+      @map_timeout.cancel
+    end
+    
+    def on_map_done
+      map = $root.join("world_biome.png")
+      if map.exist?
+        dest = $args[:maps].join("#{@seed}.png")
+        FileUtils.cp(map.to_s, dest.to_s)
+        info "Wrote #{dest.basename}"
+      else
+        error "Biome map doesn't exist! (#{map.to_s})"
+      end
+    ensure
+      stop!
+    end
+    
+    def log(level, *args)
+      $logger.send(level, args.join(" "))
+    end
+    
+    def debug(*args)
+      log(:debug, *args)
+    end
+    
+    def info(*args)
+      log(:info, *args)
+    end
+    
+    def error(*args)
+      log(:error, *args)
+    end
+end
+
+$logger = Logger.new(STDOUT)
+$logger.level = Logger::DEBUG
+
+if !$args[:maps].exist?
+  $logger.error "Maps path does not exist: #{$args[:maps]}"
+  exit 1
+end
+
+$root = Pathname.new(File.expand_path(File.join(File.dirname(__FILE__), "..")))
+$world = $root.join("world")
+jar = $root.join("craftbukkit-1.0.1-r1597-modded.jar")
+command = ["java", "-Xms2G", "-Xmx4G", "-Xincgc", "-jar", jar.to_s].join(" ")
+
+$args[:count].times do |i|
+  $logger.info "Generating map #{i+1} of #{$args[:count]}..."
+  EventMachine.run do
+    trap("INT") { @bukkit.stop! if @bukkit }
+    @bukkit = EventMachine.popen3(command, BukkitProcess)
+  end
+  $world.rmtree
+end
