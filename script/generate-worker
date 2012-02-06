@@ -77,14 +77,14 @@ class BukkitProcess < EventMachine::Connection
   def unbind
     stop_timeout
     info "BukkitProcess exited"
-    $world.rmtree
+    $world.rmtree if $world.exist?
     next!
   end
   
   def stop!
     send_data "stop"
     start_timeout "Bukkit failed to stop", 30 do
-      $world.rmtree
+      $world.rmtree if $world.exist?
       close_connection
     end
   end
