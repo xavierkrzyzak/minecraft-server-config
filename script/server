@@ -1,0 +1,32 @@
+#!/usr/bin/env ruby
+require "shellwords"
+
+@root = File.expand_path(File.join(File.dirname(__FILE__), ".."))
+Dir.chdir(@root)
+
+@locks = %w(
+  buildcraft/**/*.cfg
+  config/**/*.cfg
+  redpower/*
+  white-list.txt
+)
+
+def locks
+  @locks.map do |path|
+    Dir.glob(path)
+  end.flatten.map do |path|
+    File.join(@root, path)
+  end
+end
+
+def restore!
+  locks.each_slice(5) do |paths|
+    command = "git checkout HEAD #{paths.map { |path| path.shellescape }.join(" ")}"
+    puts command
+    system command
+  end
+end
+
+bukkit = File.join(@root, "craftbukkit-1.0.1-r1597-modded.jar")
+system "java -Xincgc -Xms8G -Xmx8G -jar #{bukkit}"
+restore!
