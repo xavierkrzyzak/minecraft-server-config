@@ -2,6 +2,6 @@ ModLoader.txt
 plugins/NoLagg/log.txt
 server
 server.log
-world*/
-world_biome.png
-world_temperature.png
+/world
+/world_biome.png
+/world_temperature.png

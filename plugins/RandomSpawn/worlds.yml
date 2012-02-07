@@ -1,0 +1,10 @@
+world:
+  randomspawnenabled: true
+  usebeds: true
+  keeprandomspawns: false
+  randomspawnonfirstjoin: true
+  spawnarea:
+    x-min: -1000
+    x-max: 1000
+    z-min: -1000
+    z-max: 1000

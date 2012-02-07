@@ -53,7 +53,7 @@ class BukkitProcess < EventMachine::Connection
     line.strip!
     line.sub!(/^>\s*/, "")
     return if line.empty?
-    # debug "received", line.inspect
+    debug "received", line.inspect
     
     if line =~ /world seed is (\S+)/i
       on_world_seed($~[1])
@@ -68,7 +68,7 @@ class BukkitProcess < EventMachine::Connection
   
   def send_data_with_log(data)
     data << "\n" unless data.end_with?("\n")
-    # debug "sent", data.inspect
+    debug "sent", data.inspect
     send_data_without_log(data)
   end
   alias_method :send_data_without_log, :send_data
@@ -78,13 +78,13 @@ class BukkitProcess < EventMachine::Connection
     stop_timeout
     info "BukkitProcess exited"
     $world.rmtree if $world.exist?
+    system $root.join("script", "git-reset-soft").to_s
     next!
   end
   
   def stop!
     send_data "stop"
     start_timeout "Bukkit failed to stop", 30 do
-      $world.rmtree if $world.exist?
       close_connection
     end
   end
@@ -180,5 +180,3 @@ $count = 0
 EventMachine.run do
   $bukkit = EventMachine.popen3($command, BukkitProcess)
 end
-
-load $root.join("script", "git-reset-soft").to_s

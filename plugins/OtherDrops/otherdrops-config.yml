@@ -1,5 +1,5 @@
 # Set this to "low" to reduce number of boot messages or to high, highest, extreme for more debugging info
-verbosity: normal
+verbosity: low
 
 # Try adjusting this if you have compatibility problems with other plugins.
 # Default: "high". Can also use "low", "normal", "high", "highest".

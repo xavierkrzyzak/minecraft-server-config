@@ -1,9 +1,6 @@
 propertime:
-  world: &time
-    timespeedday: 0.333
-    timespeednight: 0.333
+  world:
+    timespeedday: 0.25
+    timespeednight: 0.25
     timespeeddusk: 1.0
     timespeeddawn: 1.0
-    perma: none
-  world_nether: *time
-  world_the_end: *time

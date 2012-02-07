@@ -19,6 +19,8 @@ settings:
   permissions-file: permissions.yml
   update-folder: update
   ping-packet-limit: 100
+  warn-on-overload: false
+  use-exact-login-location: true
 aliases:
   icanhasbukkit:
   - version
