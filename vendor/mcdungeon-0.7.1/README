@@ -1,0 +1,107 @@
+MCDungeon
+
+MCDungeon will create a procedurally generated dungeon in a preexisting
+Minecraft map. It is not yet feature complete, but can already generate
+dungeons with quite a bit of variety. It is written in Python and
+makes use of code from Paul Hodge's minetown project and David Rio
+Vierra's pymclevel. This was inspired by BeeTLe BeTHLeHeM's MCMapper.
+
+For detailed information and documentation try the wiki:
+
+http://mcdungeon.wikkii.com/
+
+Thanks to the following for their interest, inspiration, and great ideas! 
+(in no particular order)
+
+BeeTLe BeTHLeHeM, codewarrior, Link1999, SoNick, Commander Keen,
+Yelik, NoiGren, whoiscraig, ChocolateySyrup, Sevminer, AnderZ EL,
+SuddenLee, Silre, NuclearDemon, bking1138, BarthVader,  koredozo,
+janxious, and compgurusteve.
+
+CURRENT FEATURES:
+
+   * Automatically finds a good location on a map based on range, size, and
+     depth parameters. Can detect player structures and try not to overwrite
+     them. 
+
+   * Dungeons can be removed from a map later and the landscape allowed to
+     regenerate. 
+
+   * Dungeons can be regenerated in place with a new layout, mobs, and 
+     treasure.
+
+   * Can generate multiple dungeon in a map, or try to fill the map with as
+     many dungeons as possible.
+
+   * Generates room layouts based on a random weighted selection
+     of rooms. Rooms are filled with random hallways, floors, room
+     features, and ruins on the surface, all of which are configurable.
+
+   * The density and placement of doors, portcullises, and torches are 
+     configurable. Option to place fewer torches as levels go down. Less 
+     light == more danger!
+
+   * A "hard mode" that will fill in nearby natural caves in an attempt to
+     concentrate random monster spawns inside the dungeon, add more traps,
+     and make silverfish extremely common. 
+
+   * Places stairwells between levels, and a random entrance with a
+     spiraling staircase. Some entrances have a configurable height so it 
+     can be seen from far away.
+
+   * Optionally places a MultiVerse (Craftbukkit plugin) portal at
+     the bottom of the dungeon to teleport players out to the world of
+     your choice.
+
+   * Places chests with loot around the dungeon in (probably) hard
+     to reach places. An arbitrary number of loot tables can be configured
+     to provide variety. The density of chests is configurable. 
+
+   * Places mob spawners throughout the dungeon. These will likely be near
+     chests, but not always. Mob types are configurable. The density of
+     spawners is configurable. Some 'non-standard' mobs are available. ;)
+
+   * Random placement of secret traps and puzzles.
+
+   * Output floor maps to a terminal with color on ANSI systems.
+
+   * Output entire dungeon maps to HTML.
+
+TODO:
+
+   * More room, hall, floor, feature, and ruin types.
+   * More traps!
+   * Harder hard mode!
+   * More stuff as Minecraft evolves!
+
+QUICK START:
+
+Go to the wiki! http://mcdungeon.wikkii.com/wiki/Quick_Start
+
+List available subcommands and options:
+
+./mcdungeon.py --help
+
+Help on a specific subcommand:
+
+./mcdungeon.py <subcommand> --help
+
+EXAMPLES:
+
+Load a world named 'Dungeon' in the current directory, generate a
+5x4x3 dungeon layout (5 rooms E/W, 4 rooms N/S, and 3 levels deep)
+and display the results in a terminal window. (In color on ANSI
+terminals only. Sorry Windows) The world files will not be modified,
+but are required. Basically a "dry run."
+
+./mcdungeon.py add Dungeon 5 4 3 --term 1
+
+Generate five random dungeons between the sizes of 4x4x5 and 6x6x8 and 
+save them to the world.
+
+./mcdungeon.py add Dungeon 4-6 4-6 5-8 -n 5 --write
+
+Run in interactive mode. From here you can add, list, delete or regenerate
+dungeons.
+
+./mcdungeon interactive

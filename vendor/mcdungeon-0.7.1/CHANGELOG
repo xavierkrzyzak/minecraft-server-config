@@ -1,0 +1,415 @@
+v0.7.1 - 01/22/2012
+
+  !! NOTE: This version requires Minecraft 1.1.0 release or higher!
+
+   * Torches now properly attach to walls. (No more floating torches)
+
+   * Fixed whitespace parsing bug for enchant level.
+
+   * Added bow enchantments. 
+
+   * Added spawn eggs.
+
+   * Added --spawn option to override spawn location. This allows you to
+     specify an origin instead of the default spawn location. 
+
+v0.7.0 - 11/20/2011
+
+  !! NOTE: This version requires Minecraft 1.0.0 release or higher!
+
+  !! NOTE 2: This version also breaks backward compatibility with dungeons
+     generated with older versions of MCDungeon. To reuse old maps, use 0.6.0
+     to delete the maps before running 0.7.0. 
+
+  !! NOTE 3: This version also breaks backward compatibility with old configs.
+     The loot table format has changed. If you want to use old configs, you can
+     but you'll have to replace all the loot tables with a list from one of the
+     standard configs. 
+
+   * New treasure room: Crypt
+
+   * New treasure room: EndPortal
+
+   * New secret room type: Sepulchre
+
+   * New floor types: StoneBrick and BrokenStoneBrick
+
+   * New room: GreatHall (two versions with multiple variations each)
+
+   * Removed --bury option and replaced it with --skip-bury. The default when
+     using --offset now is to bury the dungeon. 
+
+   * Revamped the cardinal directions to match beta 1.9 and 1.0.0 release.
+
+   * CellBlock rooms can now have a variety of floor types.
+
+   * Adds various blocks and items in beta 1.9 and 1.0.0 release.
+
+   * Tweaked min/max distance and room ratios in the default configs. With the
+     addition of mines and ravines, there are fewer "good" chunks to place
+     dungeons into. The new defaults will result in more dungeons being
+     placed in small maps by default.
+
+   * Portcullises can be fence, nether fence, or iron bars.
+
+   * Arenas now host Blaze.
+
+   * Spider Lairs now host cave spiders.
+
+   * Added additional materials for Stairwell, Columns, Pool, and Dais. 
+
+   * Loot tables now handle multiple items per line (ie: add one of a list) and
+     will enchant armor, weapons, and tools. See default.cfg for details.
+
+v0.6.0 - 09/22/2011
+
+   * New room feature: Mushrooms.
+
+   * Tweaked loot tables to better fit the 1.8 hunger/healing mechanics.
+
+     * Removed meats (they would spoil in a dungeon)
+
+     * Moved apples around (hey maybe they are magical!)
+
+     * Added more wheat and mushrooms for craftable food. 
+
+     * Less bread.
+
+     * Tier 0 can contain a bowl to help crafting stew.      
+
+     * Added pumpkin and melon seeds, and ender pearls to top level chests.
+
+   * New cfg option: silverfish replaces stone, cobblestone, and stone brick
+     blocks with silverfish look-alikes. 
+
+   * Reworked many things to incorporate new 1.8 blocks. 
+
+   * Updates to pymclevel fix lighting errors for 1.8 blocks. (vines, chests,
+     etc)
+
+   * New meta materials can be used for wall, floors, etc:
+
+     * meta_mossycobble: Cobblestone with veins of moss. (like pre 0.6.0 cobble)
+
+     * meta_mossystonebrick: Stone bricks with random cracks and veins of moss.
+
+     * meta_stonedungeon: Changes as you go deeper. Starts as something like
+                          mossy stone bricks and turns to cobble and mossy
+                          cobble as levels get deeper.
+
+   * Added blocks: Silverfish Stone, Stone Brick, Mossy Stone Brick,
+     Cracked Stone Brick, Iron Bars, Glass Pane, Melon, Pumpkin Stem,
+     Melon Stem, Vines, Fence Gate, Brick Stairs, Stone Brick Stairs
+
+   * MultiVerse signs work differently and are (hopefully) compatible with MV 2.
+
+   * SpiderLair, ThroneRoom, and Arena now generate portals when mvportal is
+     configured. 
+
+v0.5.2 - 08/30/2011
+
+   * New cfg option: secret_door sets the material to use for the moving parts
+     of secret doors. Handy if you want to set walls to be something immovable,
+     like bedrock. 
+
+   * Two new murals for ThroneRoom.
+
+   * New treasure room: Arena
+
+   * Fixed arrow traps sometimes breaking secret room halls. 
+
+v0.5.1 - 08/24/2011
+
+   * Fixed bug where secret rooms could cut off stairwells on the second to
+     last level.
+
+v0.5.0 - 08/22/2011
+
+   * Secret rooms!
+
+   * New cfg option: secret_rooms controls how often secret rooms show up.
+
+   * New room feature: Arcane
+
+   * New room feature: Dais
+
+   * New room feature: Forge
+
+   * Added customizable treasure rooms.
+
+   * New treasure room: SpiderLair
+
+   * New treasure room: ThroneRoom
+
+   * Bugfix: Passing -1 for number of levels caused a crash.
+
+v0.4.0 - 08/13/2011
+
+   * Optimizations to the location search algorithm. Major performance 
+     improvements when placing multiple dungeons. 
+
+   * Configurable structure detection. Chunks marked with player structures
+     will no longer be eligible for dungeon placement.
+
+   * Chunks that are too high will be excluded from searches. 
+
+   * New entrance types: Square tower (and ruined), round tower (and ruined),
+     step pyramid, and evil runestones.
+
+   * Entrance stairwells will sometimes be wood, sometimes be slabs for a bit
+     more variety.
+
+   * Dungeon info is now saved with the map, allowing the tool to detect
+     dungeons generated in previous runs.
+
+   * New subcommand: add - adds new dungeons to the world.
+
+   * New subcommand: list - lists dungeons in the world.
+
+   * New subcommand: delete - Deletes old dungeons from the world. Chunks
+     containing dungeons are deleted and allowed to regenerate back to 
+     their natural state. (you need to load the map into Minecraft for the
+     chunks to be regenerated)
+
+   * New subcommand: regenerate - Regenerates dungeons in place. (with a few
+     caveats) Dungeons will have a new maze layout, new rooms, restocked
+     chests and spawners, and can even use a different config file. 
+
+     - Surface structures will never be regenerated. This includes ruins and
+       entrances. Any damage done to these structures by players or mobs will
+       not be repaired. 
+
+     - Any chests at the surface within the area of the dungeon (even ones
+       not placed by MCDungeon! Be careful!) will be refreshed with tier
+       zero loot
+
+     - Regenerated dungeons will never link up with any natural caverns.
+       this is because the area underground is refilled with stone and ores,
+       blocking off any natural caves that may have connected. 
+
+     - You cannot use hard mode on regenerated dungeons. 
+
+   * Interactive mode supports add, list, delete, and regenerate.
+
+   * Added --dir option for interactive mode. Use this to override the
+    default path to your Minecraft save directory.
+
+v0.3.1 - 07/24/2011
+
+   * New cfg option: resetting_hall_pistons. Defaults to true. 
+
+v0.3.0 - 07/20/2011
+
+   * New documentation wiki: http://mcdungeon.wikkii.com/
+
+   * Added Spruce Sapling, Birch Sapling, Spruce Leaves, Birch Leaves, Powered
+     Rail, Detector Rail, Sticky Piston, Piston, Trapdoor, Map, and Shears to
+     items.txt. Renamed "Web" to "Cobweb"
+
+   * Will now search the current directory and then the user's save directory
+     for world files. You no longer have to type out the full path if the
+     world is in the standard Minecraft save directory. (All OSes)
+
+   * Rooms can be larger than one chunk. They can also be irregularly shaped. 
+
+   * Massive changes to the maze generation algorithm to accommodate multi-tile
+     rooms and treasure rooms. 
+
+   * The minimum dungeon size is now 4x4x1. This is to accommodate large tile
+     types and treasure rooms. 
+
+   * New room type Basicx2x2: Large 2x2 tile version of Basic. 
+
+   * New room types: Cavern and CavernLarge. Creates randomly sized cavern
+     shaped rooms. These are large, and will be a random shape and size.
+
+   * New room types: SandstoneCavern SandstoneCavernLarge. Like caverns, but
+     made of sandstone and sand floors.
+
+   * New room types: NaturalCavern and NaturalCavernLarge. The wall of this
+     cavern will be the naturally occurring blocks in the surrounding area.
+     These may link up with natural caves surrounding the dungeon (unless
+     hard mode is used).
+
+   * New treasure room. (more will be added)
+
+   * New room type: CellBlock
+
+   * Added new piston-based traps. (See hall_piston_traps in the config)
+ 
+   * New standard config: caverns
+
+   * More updates to pymclevel handle lighting on tall grass and additional 
+     oddball compression of chunks.
+
+   * Chunks that are too high will be excluded from the placement algorithm.
+     This keeps towers from being cut off at the height limit. 
+
+   * External noise module is no longer required. (perlin.py is now bundled)
+
+   * Tweaks, tweaks, and more tweaks. 
+
+   * Bugfix: Fixed a problem parsing ranges when Z was fixed and X
+     was a range.
+
+   * Bugfix: Fixed bug with multi-dungeon not properly disabling -e 
+
+v0.2.3 - 05/30/2011
+
+    * Updated pymclevel files to 2011-05-01 (commit 20223cae8edfc47a8723)
+      This will hopefully help with reading some types of levels that were
+      edited or generated with certain other tools. (Seibai, and others)
+
+v0.2.2 - 05/26/2011
+
+    * Fixed an issue where multi-dungeon would bail out early when
+      maximize_distance was true and the map had a very irregular shape. 
+
+v0.2.1 - 05/26/2011
+  
+    * Added a bounds to prevent crashing when placing dungeons on very high
+      plateaus.
+
+v0.2.0 - 05/26/2011
+
+    * Multiple dungeons can now be drawn in one pass. Use the --number option
+      to specify the number of non-overlapping dungeons that the tool should
+      attempt to generate. -1 will fill in as many dungeons as possible given 
+      the min/max chunk settings in your config file. This is also supported in
+      interactive mode. 
+
+    * Surface level ruins. Ruins are chosen from a customizable weighted list
+      like other dungeon features. 
+
+    * X, Z, and LEVELS options will now take ranges for random sizes. 
+      example: ./mcdungeon.py MAP 3-5 2-5 5-8 -n 2
+      Will generate two random dungeons between 3x2x5 and 5x5x8 in size.
+      This also works in interactive mode.
+
+    * Sandbars now merge with the existing world better. Sand will only be
+      drawn on water or ice blocks. 
+
+    * Lava pits can sometimes have lava streaming from the ceiling. 
+
+    * Skeleton balconies.
+
+    * Defective arrow traps can sometimes explode. 
+
+    * Pit rooms can contain falling sand traps.
+
+    * Added --bury option to calculate Y coordinate when using --offset.
+
+    * Added --entrance option to specify the location of the tower when using
+      --offset. 
+
+    * New cfg option: torches_position will specify the height of torches on
+      walls.
+
+    * New cfg option: tower_ruin will make the entrance towers crumble. 
+
+    * New cfg option: ruin_ruins. Setting this to False will skip any attempt
+      to "ruin" surface structures. 
+
+    * New cfg option: maximize_distance will attempt to place dungeons as far
+      apart as possible when rendering multi-dungeons.
+
+    * MCDungeon will now look in its current running directory for support
+      files and configs. (you no longer need to cd to its directory before
+      running it.)
+
+    * More progress info and verbose output for troubleshooting.
+
+    * Bugfix: Chests hovering above subfloor and half blocks in lava pits and
+      treasure rooms.
+
+    * Several other bugs and unhandled exceptions fixed. 
+
+v0.1.0 - 04/27/2011
+
+    * More interesting lava floors.
+
+    * Revamped chest and spawner placement. These can now appear in lava and
+      other rooms with very little floor space. 
+
+    * Pit rooms can now be circular. (and possibly more shapes in the future)
+
+    * Images used for tiles in HTML maps are now 12x12. More tiles added.
+
+    * All new maze generation algorithm. How convoluted mazes are can now be
+      controlled in the config file. Entry and exit stairs are now guaranteed
+      to be as far away from each other as possible on a given level.
+  
+    * New config option: loops - Controls how many loops the maze will have.
+      0 = no loops, just a few branches. 100 = A grid. Values around 20-30
+      will produce mazes similar to the old algorithm. 
+
+    * Bridges in pit rooms now always connect all hallways. Pit floors now
+      never have bridges since there are other ways to cross them. 
+
+    * New config option: portcullises_closed - Percentage of portcullises that
+      will be rendered closed. 0 = none, 100 = all.
+
+    * The final bounds of the dungeon are printed on the last line. Handy for
+      folks running WorldGuard or similar. 
+
+    * Single hall corridor dead ends are now special cave in rooms that can
+      contain ores in similar proportions to the world. (coal is common,
+      diamond and lapis are rare, etc)
+
+    * The default tower entrance has a few improvements, and will now build a
+      sand bar around itself if placed in water. 
+
+    * More verbose output in certain situations.
+
+    * Configuration files are now kept in a directory named "configs" in the 
+      MCDungeon directory. Several example configs have been added. 
+
+    * New config option: hard_mode - Hard mode will fill in caves under and
+      around the dungeon in an attempt to concentrate monster spawns inside the
+      walls of the dungeon. This works best on larger maps that already have 
+      chunks within the start area generated. Medium to large sized 
+      dungeons with 5-8 levels will work best as well. 
+
+    * Interactive mode will now prompt for which configuration file you want 
+      to use. 
+ 
+    * Fixed a crash bug if the tower option was set too high. 
+
+    * Spider webs.
+
+v0.0.4 - 04/14/2011
+
+    * Fixed the "subfloor" setting not reading properly from the .cfg file.
+
+v0.0.3 - 04/1/2011
+
+    * A few tweaks to the default .cfg file.
+
+    * Removed --world option and replaced it with a positional argument.
+
+    * Added --interactive option. This will prompt for SAVEDIR, Z, X, 
+          and LEVEL
+
+    * Added batch file for windows to start in interactive mode.
+
+    * Added a little more progress feedback.
+
+v0.0.2 - 03/31/2011
+
+    * Added Cookie and Locked Chest to items.txt.
+
+    * Added Cookie to default loot tables.
+
+    * Reworked the --offset option. It now takes three args instead
+      if just one. 
+
+    * Z, X, and LEVELS args now accept -1 as a value. This will 
+      cause the tool to pick random values for these. Z and X will
+      between 2 and the maximum distance between dist_min and dist_max
+      in the .cfg file. Levels will be between 2 and 8. This should 
+      maximize the chance that the dungeon will fit into the map, 
+      unless the map has a ton of very shallow chunks around spawn.
+
+v0.0.1 - 03/30/2011
+
+    * Initial release!
