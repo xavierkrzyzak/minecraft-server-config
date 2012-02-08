@@ -1,3 +1,4 @@
+*.pyc
 /ModLoader.txt
 /plugins/NoLagg/log.txt
 /server.log
