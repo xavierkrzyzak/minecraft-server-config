@@ -1,0 +1,7 @@
+namespace: com.blolol.minecraft
+graphite:
+  host: stats.rosspaffett.com
+  port: 2003
+statsd:
+  host: stats.rosspaffett.com
+  port: 8125
